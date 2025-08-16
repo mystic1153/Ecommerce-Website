@@ -13,7 +13,6 @@ import path from "path";
 
 dotenv.config();
 
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -23,6 +22,7 @@ app.use(express.json({limit:"10mb"})); // allows to parse the body of the reques
 app.use(cookieParser());
 app.use(cors());
 
+// API routes - these must come BEFORE the catch-all route
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
@@ -30,10 +30,13 @@ app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/analytics", analyticsRoutes);
 
+// Production static file serving and catch-all route
 if(process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "/frontend/dist")));
-
-    app.get("*", (req, res) => {
+    // Serve static files from the React build
+    app.use(express.static(path.join(__dirname, "frontend", "dist")));
+    
+    // Catch-all route for React Router - must be last and more specific
+    app.get("/:path(*)", (req, res) => {
         res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
     });
 }
@@ -41,5 +44,5 @@ if(process.env.NODE_ENV === "production") {
 app.listen(PORT, () => {
     console.log("Server is running on http://localhost:" + PORT);
     connectDB();
-})
+});
 
