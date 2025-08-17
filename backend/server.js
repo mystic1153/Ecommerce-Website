@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: [
         "http://localhost:5173",
-        "https://ecommerce-website-4r6t7l8qv-yugs-projects-bdf6371f.vercel.app",
+        "https://ecommerce-website-zeta-blue.vercel.app/",
     ],
     credentials: true,
 }));
