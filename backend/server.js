@@ -21,7 +21,13 @@ const __dirname = path.resolve();
 
 app.use(express.json({limit:"10mb"})); // allows to parse the body of the request
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://ecommerce-website-4r6t7l8qv-yugs-projects-bdf6371f.vercel.app",
+    ],
+    credentials: true,
+}));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
